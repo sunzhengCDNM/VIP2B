@@ -18,7 +18,7 @@ All scripts in VIP2B are programmed by Perl and Python, and execution of VIP2B i
     This makes it easy to update the software in the future using `git pull` as bugs are fixed and features are added.
  * Alternatively, directly download the whole GitHub repo without installing GitHub:
  
-   `wget https://github.com/sunzhengCDNM/***/archive/master.zip`  
+   `wget https://github.com/sunzhengCDNM/VIP2B/archive/master.zip`  
    `unzip master.zip`
    `cd VIP2B-master`
    
