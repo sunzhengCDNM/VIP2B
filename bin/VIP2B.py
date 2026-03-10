@@ -318,7 +318,7 @@ def main():
 	parser.add_argument('-p',help='Number of processes, note that more threads may require more memory, default 1',dest='processes',type=int,default=1)
 	parser.add_argument('-t',help='Threshold for species identification, G5 means using gscore > 5 and M0.5 means using ML probability > 0.5 as a filtering parameter, G2/G5/M0.1/M0.5 are a few commonly used options, default M0.5',dest='threshold',type=str,default='M0.5')
 	parser.add_argument('-c',help='cut off for database, default 30000',dest='cutoff',type=int,default=30000)
-	parser.add_argument('-f',help='threshold for coverage filtering, default 0.5',dest='cov_thresh',type=float,default=0.5)
+	parser.add_argument('-f',help='threshold for coverage filtering, default 0.6',dest='cov_thresh',type=float,default=0.6)
 	parser.add_argument('--intersection',help='intersection or union of tags between genomes, default union',dest='intersection',action='store_true')
 #	parser.add_argument('-n',help='negative control, use comma separation, default is the sample starting with OENC_',dest='nc',type=str,required=False)
 #	parser.add_argument('-H',help='host, choose from human/mouse/gallus or use commas to link multiple hosts, default None',dest='host', type=str,default=None)
