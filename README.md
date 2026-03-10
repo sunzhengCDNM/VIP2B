@@ -50,8 +50,8 @@ VIP2B is a highly automatic pipeline, and only a few parameters are required for
  
    `cd example`
    `mkdir -p data/`  
-   `wget -t 3 -O data/test_seq.R1.fq.gz https://figshare.com/ndownloader/files/52717946`  
-   `wget -t 3 -O data/test_seq.R2.fq.gz https://figshare.com/ndownloader/files/52717949`
+   `wget --user-agent="Mozilla/5.0" -t 3 -O data/test_seq.R1.fq.gz https://figshare.com/ndownloader/files/52717946`  
+   `wget --user-agent="Mozilla/5.0" -t 3 -O data/test_seq.R2.fq.gz https://figshare.com/ndownloader/files/52717949`
  
 * After downloading the sequencing data, we can finally run VIP2B:  
  
@@ -72,7 +72,7 @@ The main program is `bin/VIP2B.py` in this repo. You can check out the usage by 
 usage: VIP2B.py [-h] -i INPUT [-o OUTPUT]
                 [-l {Class,Order,Family,Genus,Species}] [-e ENZYME]
                 [-d DATABASE] [-p PROCESSES] [-t THRESHOLD] [-c CUTOFF]
-                [--intersection]
+                [--intersection] [-f COV_THRESH]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -86,6 +86,7 @@ optional arguments:
   -p PROCESSES          Number of processes, note that more threads may require more memory, default 1
   -t THRESHOLD          Threshold for species identification, G5 means using gscore > 5 and M0.5 means using ML probability > 0.5 as a filtering parameter, G2/G5/M0.1/M0.5 are a few commonly used options, default M0.5
   -c CUTOFF             cut off for database, default 30000
+  -f COV_THRESH         threshold for coverage filtering in the second round reads alignment, default 0.6
   --intersection        intersection or union of tags between genomes, default union
 
 author: Zheng Sun, Jiang Liu
