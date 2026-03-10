@@ -22,8 +22,8 @@ All scripts in VIP2B are programmed by Perl and Python, and execution of VIP2B i
  
    `wget https://github.com/sunzhengCDNM/VIP2B/archive/master.zip`  
    `unzip master.zip`
-   `cd VIP2B-main`
-   
+   `cd VIP2B-master`
+
  ### Install VIP2B in a conda environment 
  * Conda installation  
    [Miniconda](https://docs.conda.io/en/latest/miniconda.html) provides the conda environment and package manager, and is the recommended way to install VIP2B. 
