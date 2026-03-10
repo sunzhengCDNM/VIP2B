@@ -22,7 +22,7 @@ All scripts in VIP2B are programmed by Perl and Python, and execution of VIP2B i
  
    `wget https://github.com/sunzhengCDNM/VIP2B/archive/master.zip`  
    `unzip master.zip`
-   `cd VIP2B-master`
+   `cd VIP2B-main`
    
  ### Install VIP2B in a conda environment 
  * Conda installation  
