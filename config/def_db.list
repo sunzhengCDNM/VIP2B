@@ -1,17 +1,19 @@
-# taxonomy
-abfh_classify_with_speciename.txt.gz	https://figshare.com/ndownloader/files/58847980	282a34d153bee2a1f0000423cbee9d64
-# main db
-8Enzyme.marisa30000	https://figshare.com/ndownloader/files/58847998	46d06c6af20881b8b59a719e8dc49811
-8Enzyme.marisa60000	https://figshare.com/ndownloader/files/58847992	0c871166ae5359a52f287daeb5905a89
-8Enzyme.marisa90000	https://figshare.com/ndownloader/files/58847995	65c244e0e910fc7d84bba8037ad2a5f4
-8Enzyme.marisa120000	https://figshare.com/ndownloader/files/58848004	a3b51822a08d52093238f61a991e6f55
-8Enzyme.marisa150000	https://figshare.com/ndownloader/files/58848007	ac8c868ba93d3d1c2073f2ae305bc836
-8Enzyme.marisa180000	https://figshare.com/ndownloader/files/58848001	b6fa00bd7440c6e9fda85718eb529d7f
-8Enzyme.marisa210000	https://figshare.com/ndownloader/files/58848010	f9e1ba72ebd2d1549f08904b216c5d79
-# uniq db
-8Enzyme.Species.uniq.marisa	https://figshare.com/ndownloader/files/58848013	0befbe79e1de76049f43babd33478dad
-8Enzyme.Species.uniq.stat.xls	https://figshare.com/ndownloader/files/58847983	a596d898f961dd1a62881eee00412e94
-8Enzyme.Genus.uniq.marisa	https://figshare.com/ndownloader/files/58848016	ca4158d165eac5e6ac39ef1de4f1f5d1
-8Enzyme.Genus.uniq.stat.xls	https://figshare.com/ndownloader/files/58847986	98b80673762467d230be199f9a5179f1
-8Enzyme.Family.uniq.marisa	https://figshare.com/ndownloader/files/58848019	e35bf3710b4f4454053b61615c75b33b
-8Enzyme.Family.uniq.stat.xls	https://figshare.com/ndownloader/files/58847989	a0c0ef7e51c47c7b1b6c3d819afa7d30
+# taxonomy		
+abfh_classify_with_speciename.txt.gz	https://zenodo.org/records/18944630/files/abfh_classify_with_speciename.txt.gz	282a34d153bee2a1f0000423cbee9d64
+# main db		
+8Enzyme.marisa30000	https://zenodo.org/records/18944630/files/8Enzyme.marisa30000	46d06c6af20881b8b59a719e8dc49811
+8Enzyme.marisa60000	https://zenodo.org/records/18944630/files/8Enzyme.marisa60000	0c871166ae5359a52f287daeb5905a89
+8Enzyme.marisa90000	https://zenodo.org/records/18944630/files/8Enzyme.marisa90000	65c244e0e910fc7d84bba8037ad2a5f4
+8Enzyme.marisa120000	https://zenodo.org/records/18944630/files/8Enzyme.marisa120000	a3b51822a08d52093238f61a991e6f55
+8Enzyme.marisa150000	https://zenodo.org/records/18944630/files/8Enzyme.marisa150000	ac8c868ba93d3d1c2073f2ae305bc836
+8Enzyme.marisa180000	https://zenodo.org/records/18944630/files/8Enzyme.marisa180000	b6fa00bd7440c6e9fda85718eb529d7f
+8Enzyme.marisa210000	https://zenodo.org/records/18944630/files/8Enzyme.marisa210000	f9e1ba72ebd2d1549f08904b216c5d79
+# uniq db		
+8Enzyme.Species.uniq.marisa	https://zenodo.org/records/18944630/files/8Enzyme.Species.uniq.marisa	0befbe79e1de76049f43babd33478dad
+8Enzyme.Species.uniq.stat.xls	https://zenodo.org/records/18944630/files/8Enzyme.Species.uniq.stat.xls	a596d898f961dd1a62881eee00412e94
+8Enzyme.Genus.uniq.marisa	https://zenodo.org/records/18944630/files/8Enzyme.Genus.uniq.marisa	ca4158d165eac5e6ac39ef1de4f1f5d1
+8Enzyme.Genus.uniq.stat.xls	https://zenodo.org/records/18944630/files/8Enzyme.Genus.uniq.stat.xls	98b80673762467d230be199f9a5179f1
+8Enzyme.Family.uniq.marisa	https://zenodo.org/records/18944630/files/8Enzyme.Family.uniq.marisa	e35bf3710b4f4454053b61615c75b33b
+8Enzyme.Family.uniq.stat.xls	https://zenodo.org/records/18944630/files/8Enzyme.Family.uniq.stat.xls	a0c0ef7e51c47c7b1b6c3d819afa7d30
+# function db		
+metadata.tsv.gz	https://zenodo.org/records/18944630/files/metadata.tsv.gz	f539c58de445b388bdf0457a412b77d3
