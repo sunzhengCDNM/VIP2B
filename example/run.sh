@@ -5,10 +5,10 @@ mkdir -p data/
 
 # Download data
 if [[ ! -f data/test_seq.R1.fq.gz ]]; then
-    wget --user-agent="Mozilla/5.0" -t 3 -O data/test_seq.R1.fq.gz https://figshare.com/ndownloader/files/52717946
+    wget -t 3 -O data/test_seq.R1.fq.gz https://zenodo.org/records/18947711/files/test_seq.R1.fq
 fi
 if [[ ! -f data/test_seq.R2.fq.gz ]]; then
-    wget --user-agent="Mozilla/5.0" -t 3 -O data/test_seq.R2.fq.gz https://figshare.com/ndownloader/files/52717949
+    wget -t 3 -O data/test_seq.R2.fq.gz https://zenodo.org/records/18947711/files/test_seq.R2.fq
 fi
 
 # Run pipeline
