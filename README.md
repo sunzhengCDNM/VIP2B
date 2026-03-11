@@ -52,8 +52,8 @@ VIP2B is a highly automatic pipeline, and only a few parameters are required for
  
    `cd example`
    `mkdir -p data/`  
-   `wget --user-agent="Mozilla/5.0" -t 3 -O data/test_seq.R1.fq.gz https://figshare.com/ndownloader/files/52717946`  
-   `wget --user-agent="Mozilla/5.0" -t 3 -O data/test_seq.R2.fq.gz https://figshare.com/ndownloader/files/52717949`
+   `wget -t 3 -O data/test_seq.R1.fq.gz https://zenodo.org/records/18947711/files/test_seq.R1.fq`  
+   `wget -t 3 -O data/test_seq.R2.fq.gz https://zenodo.org/records/18947711/files/test_seq.R2.fq`
  
 * After downloading the sequencing data, we can finally run VIP2B:  
  
