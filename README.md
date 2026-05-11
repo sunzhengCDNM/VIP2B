@@ -1,5 +1,9 @@
 # VIP2B
-VIrome Profiler with type IIB restriction sites for WMS data
+VIrome Profiler with type IIB restriction sites for WMS data.
+
+---
+## Performance
+VIP2B was computationally efficient. Using four CPU threads on a Linux system equipped with an Intel Xeon Platinum 8380 processor, VIP2B profiled a 6.6 GB shotgun metagenomic sample in 6.68 minutes, with a peak memory usage of only 1.09 GB. 
 
 ---
 
