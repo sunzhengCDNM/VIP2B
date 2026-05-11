@@ -1,5 +1,6 @@
 # VIP2B
 VIrome Profiler with type IIB restriction sites for WMS data.
+![Workflow_of_VIP2B](Workflow_of_VIP2B.jpg)
 
 ---
 ## Performance
