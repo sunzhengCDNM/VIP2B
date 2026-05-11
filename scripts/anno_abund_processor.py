@@ -1,4 +1,3 @@
-#!/data/software/install/miniconda3/envs/python.3.7.0/bin/python3
 import pandas as pd
 import os, argparse
 from pathlib import Path
@@ -108,11 +107,8 @@ def generate_anno_and_func_files(df_merged: pd.DataFrame, sample_cols: list, out
         "lifestyle": {
             "prefix": "lifestyle:",
             "values": ["lytic", "temperate", "unknown"]
-        },
-        "viralverify_prediction": {
-            "prefix": "viralverify_prediction:",
-            "values": ["Chromosome", "Plasmid", "Uncertain", "Virus", "unknown"]
         }
+        # viralverify_prediction removed from Phenotype.tsv output
     }
     anno_result: Dict[str, Dict[str, float]] = {}
 

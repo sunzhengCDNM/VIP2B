@@ -80,7 +80,7 @@ def main():
 						cov = '1'
 					else:
 						cov = info_dic[smp][spe]
-					cov_list.append(cov)
+					cov_list.append(cov)   # bug fix: was missing, so only zeros were written
 				except KeyError:
 					cov_list.append('0')
 			OUT.write('{}\t{}\n'.format(spe, '\t'.join(cov_list)))

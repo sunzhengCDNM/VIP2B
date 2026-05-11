@@ -39,6 +39,19 @@ def check_dir(dir):
 		report("INFO",info)
 	return(dir)
 
+# --- Fix for macOS (spawn) multiprocessing ---
+# On Linux, ProcessPoolExecutor uses 'fork' and child processes inherit globals
+# from the parent. On macOS (Python >= 3.8), the default is 'spawn', which
+# starts a fresh interpreter where globals set in main() are not available.
+# We use an initializer to explicitly set globals in each worker process,
+# which works correctly on both Linux (fork) and macOS (spawn).
+def init_worker(db_file, gcf_tax, gcf_theo, tax_theo):
+	global tag_gcf_trie, gcf_tax_dic, gcf_theo_tag_num_dic, tax_theo_tag_num_dic
+	tag_gcf_trie = marisa_trie.RecordTrie('8c').mmap(db_file)
+	gcf_tax_dic = gcf_tax
+	gcf_theo_tag_num_dic = gcf_theo
+	tax_theo_tag_num_dic = tax_theo
+
 def qual(outdir, smp, fasta, threshold):
 	report('INFO', f"for sample {smp}")
 	transtable = str.maketrans('ATGCN', 'TACGN')
@@ -101,8 +114,6 @@ def main():
 	parser.add_argument('-p',help='number of processes used',dest='processes',type=int,default=1)
 	parser.add_argument('-ct',help='threshold for coverage filtering',dest='threshold',type=float,default=0)
 	args=parser.parse_args()
-#	global enzyme, gcf_theo_tag_num_dic, tax_theo_tag_num_dic, gcf_tax_dic, tag_gcf_trie
-	global gcf_theo_tag_num_dic, tax_theo_tag_num_dic, gcf_tax_dic, tag_gcf_trie
 
 	level_dic = {
 			'Family': 5,
@@ -125,9 +136,6 @@ def main():
 	report('INFO', 'Start reading the database')
 	db_file = check_file(args.database + '.marisa')
 	stat_file = check_file(args.database + '.stat.xls')
-#	enzyme = args.enzyme
-	tag_gcf_trie = marisa_trie.RecordTrie('8c').mmap(db_file)
-#	print(tag_gcf_trie.keys())
 
 # reading stat file
 	gcf_theo_tag_num_dic = {} # {gcf: uniq_tag_num}
@@ -143,7 +151,11 @@ def main():
 
 # qual
 	report('INFO', 'Start qualitative analysis using {} processes'.format(args.processes))
-	executor = ProcessPoolExecutor(args.processes)
+	executor = ProcessPoolExecutor(
+		args.processes,
+		initializer=init_worker,
+		initargs=(db_file, gcf_tax_dic, gcf_theo_tag_num_dic, tax_theo_tag_num_dic)
+	)
 	pool = []
 	with open(check_file(args.list), 'r') as IN:
 		for line in IN:

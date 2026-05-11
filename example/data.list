@@ -1,1 +1,2 @@
-test_sample	data/test_seq.R1.fq.gz	data/test_seq.R2.fq.gz
+test_sample_PE	data/test_seq.R1.fq.gz	data/test_seq.R2.fq.gz
+test_sample_SE	data/test_seq.fq.gz

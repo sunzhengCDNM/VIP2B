@@ -1,94 +1,200 @@
 # VIP2B
-VIrome Profiler with type IIB restriction sites for WMS data. This version is written purely in Python.
+VIrome Profiler with type IIB restriction sites for WMS data
 
-![Workflow_of_VIP2B](Workflow_of_VIP2B.jpg)
-
+---
 
 ## Installation
- 
- ### System requirements
- 
- #### Dependencies
-All scripts in VIP2B are programmed by Perl and Python, and execution of VIP2B is recommended in a conda environment. This program could work properly in the Unix systems, or Mac OSX, as all required packages can be appropreiately download and installed.  
- #### Memory usage
-**> 2G RAM** is required to run this pipeline.  
- ### Download the pipeline
- * Clone the latest version from GitHub (recommended):  
- 
-   `git clone https://github.com/sunzhengCDNM/VIP2B/`  
-   `cd VIP2B`
-    This makes it easy to update the software in the future using `git pull` as bugs are fixed and features are added.
-
- ### Install VIP2B in a conda environment 
- * Conda installation  
-   [Miniconda](https://docs.conda.io/en/latest/miniconda.html) provides the conda environment and package manager, and is the recommended way to install VIP2B. 
- * Create a conda environment for VIP2B pipeline:  
-   After installing Miniconda and opening a new terminal, make sure you’re running the latest version of conda:
-   
-   `conda update conda`
-   
-   Once you have conda installed, create a conda environment with the yml file `config/conda-20250709.yml`.
-   
-   `conda env create -n VIP2B.1.1 --file config/conda-20250709.yml`
-   
- * Activate the VIP2B conda environment by running the following command:
- 
-   `conda activate VIP2B.1.1` or `source activate VIP2B.1.1`
-   
-   Make sure the conda environment of VIP2B has been activated by running the above command before you run VIP2B everytime.  
-
-   Now, everything is ready for VIP2B :), Let's get started.
- 
-## Using VIP2B
- 
-### Quick start
-VIP2B is a highly automatic pipeline, and only a few parameters are required for the pipeline.
-* We prepared a test pair-end sequencing data:  
- 
-   `cd example`
-   `mkdir -p data/`  
-   `wget -t 3 -O data/test_seq.R1.fq.gz https://zenodo.org/records/19700476/files/test_seq.R1.fq.gz`  
-   `wget -t 3 -O data/test_seq.R2.fq.gz https://zenodo.org/records/19700476/files/test_seq.R2.fq.gz`
- 
-* After downloading the sequencing data, we can run VIP2B:  
- 
-   `python3 ../bin/VIP2B.py -i data.list`
-
-    In `data.list` you can learn how to prepare your input data, both single-end and paired-end data can be used as input.  
-    
+```bash
+git clone https://github.com/YiyanYang0728/VIP2B.git
+cd VIP2B
+# Use the provided conda environment
+conda create -n VIP2B -c conda-forge --file requirement.txt
+conda activate VIP2B
+# If you have mamba, run
+mamba create -n VIP2B -c conda-forge --file requirement.txt
+mamba activate VIP2B
 ```
-sample1 <tab> shotgun1_left.fastq(.gz) <tab> shotgun1_right.fastq(.gz)
-sample2 <tab> shotgun2.fastq(.gz)
-sample3 ...
+Make sure the conda environment of VIP2B has been activated by running the above command before you run VIP2B everytime.
+
+Build an executable software:
+```bash
+cargo build --release
+# Add the executive software to PATH:
+export PATH=$PATH:$PWD/target/release
+# Or copy it to your bin directory: cp target/release/VIP2B <your bin path>
 ```
 
-### Parameters
-The main program is `bin/VIP2B.py` in this repo. You can check out the usage by printing the help information via `python3 bin/VIP2B.py -h`.
+Download databases:
+```bash
+mkdir -p database
+# this may take a while
+python scripts/DownloadDB.py -l config/def_db.list -d database
+```
+
+---
+
+## Quick start & test
+```bash
+# We prepared a pair-end and a single-end sequencing test data:
+cd example
+mkdir -p data/
+wget -t 3 -O data/test_seq.R1.fq.gz https://zenodo.org/records/19700476/files/test_seq.R1.fq.gz
+wget -t 3 -O data/test_seq.R2.fq.gz https://zenodo.org/records/19700476/files/test_seq.R2.fq.gz
+wget -t 3 -O data/test_seq.fq.gz https://zenodo.org/records/19700476/files/test_seq.fq.gz
+db=$PWD/../database # or <your full path for the database>
+VIP2B -i data.list -p 4 -d ${db}/8Enzyme -o test_result
+```
+
+---
+
+## Sample list format (`-i`)
+
+A tab-separated file — one sample per line. Lines beginning with `#` are ignored.
+Single-end and paired-end samples can be mixed.
+```
+# single-end (2 columns)
+sample1    /data/sample1.fastq.gz
+# paired-end (3 columns)
+sample2    /data/sample2_R1.fastq.gz    /data/sample2_R2.fastq.gz
+```
+
+---
+
+## parameters
+```
+VIP2B -h
+Unified 2bRAD virome profiler (digest + abundance)
+
+Usage: VIP2B [OPTIONS] -i <FILE>
+
+Options:
+  -i <FILE>             Sample list TSV (2-col SE or 3-col PE; # lines ignored) Format: sample_id <TAB> reads.fastq.gz [<TAB> reads_R2.fastq.gz]
+  -o <DIR>              Output directory [default: VIP2B_result in current directory] [default: VIP2B_result]
+  -l <LEVEL>            Taxonomy level [Class|Order|Family|Genus|Species] [default: Species] [possible values: Class, Order, Family, Genus, Species]
+  -e <ENZYME[,...]>     Enzyme(s): comma-separated names or "all". Available: AlfI,BcgI,BslFI,CjeI,CjePI,FalI,HaeIV,Hin4I The default 8-enzyme set matches the standard database [default: AlfI,BcgI,BslFI,CjeI,CjePI,FalI,HaeIV,Hin4I]
+  -d <PREFIX>           Database prefix (without extension, e.g. /path/to/database/8Enzyme) [default: database/8Enzyme relative to the vip2b binary] [default: database/8Enzyme]
+  -p <N>                Number of parallel processes/threads (more may require more memory) [default: 1]
+  -t <G5|M0.5>          Threshold for species identification. G
+                        : G-score filter applied in Rust (e.g. G2, G5). M{p}: MAP2B_ML.py is called automatically after the abundance step [default: M0.5]
+  -c <N>                Cut-off for database building (mkdb step only; not applied in Rust) [default: 30000]
+  -f <FLOAT>            Threshold for coverage filtering: sequenced_tags / theoretical_tags [default: 0.6]
+      --intersection    Use intersection of tags between genomes (default: union). Applies to mkdb step only; stored here for pipeline compatibility
+      --batch-size <N>  Reads per parallel batch in digest phase [default: 100000]
+  -h, --help            Print help (see more with '--help')
+  -V, --version         Print version
+```
+
+Parameter explanation:
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `-i` | Sample list TSV (2-col SE or 3-col PE; required) | — |
+| `-o` | Output directory | `./VIP2B_result` |
+| `-l` | Taxonomy level: `Class` / `Order` / `Family` / `Genus` / `Species` | `Species` |
+| `-e` | Enzyme(s), comma-separated, or `all` for all 8 enzymes | `AlfI,BcgI,BslFI,CjeI,CjePI,FalI,HaeIV,Hin4I` |
+| `-d` | Database prefix — path without extension (e.g. `/db/8Enzyme`) | `../database/8Enzyme` |
+| `-p` | Number of parallel processes/threads | `1` |
+| `-t` | Species ID threshold: `G{n}` (G-score) or `M{p}` (ML probability) | `M0.5` |
+| `-c` | Cut-off for per-sample DB building (mkdb step) | `30000` |
+| `-f` | Coverage threshold for abundance output (sequenced / theoretical tags) | `0.6` |
+| `--intersection` | Use tag intersection instead of union in mkdb step | off |
+| `--batch-size` | Reads per Rust parallel batch (tuning only) | `100000` |
+
+Available enzymes (16 total):  
+`AlfI AloI BaeI BcgI BplI BsaXI BslFI Bsp24I CjeI CjePI CspCI FalI HaeIV Hin4I PpiI PsrI`
+
+### Species ID threshold (`-t`)
+
+| Value | Behaviour |
+|-------|-----------|
+| `G2`, `G5`, … | G-score > n — `gscore_filter.py` called automatically |
+| `M0.1`, `M0.5`, … | ML probability > p — `MAP2B_ML.py` called automatically (requires XGBoost) |
+
+---
+
+## Pipeline phases and output structure
+
+The pipeline produces **5 output folders**, matching the original VIP2B exactly:
 
 ```
-usage: VIP2B.py [-h] -i INPUT [-o OUTPUT]
-                [-l {Class,Order,Family,Genus,Species}] [-e ENZYME]
-                [-d DATABASE] [-p PROCESSES] [-t THRESHOLD] [-c CUTOFF]
-                [--intersection] [-f COV_THRESH]
+{output}/
+├── 0.dige/                         Phase 1 — Tag extraction (Rust)
+│   ├─ {sample}.fa.gz              Extracted 2bRAD tags (gzip FASTA)
+│   └── {sample}/
+│       └── {sample}.dige.stat.xls  Digest statistics (input reads / extracted tags / rate)
+│
+├── 1.qual/                         Phase 2+3 — Qualitative abundance + species filter
+│   └── {sample}/
+│       ├── {sample}.xls            Per-sample abundance (all candidate species, ct=0)
+│       ├── {sample}.GCF_detected.xls  GCF-level coverage
+│       └── pred.result             Species that passed the -t filter (input to mkdb)
+│
+├── 2.mkdb/                         Phase 4 — Per-sample quantitative database
+│   └── {sample}/
+│       ├── {sample}.marisa         Per-sample tag trie (only confirmed species)
+│       ├── {sample}.stat.xls       Theoretical tag counts for confirmed species
+│       └── reads.list              Sample→FASTQ mapping for this sample
+│
+├── 3.quan/                         Phase 5 — Quantitative abundance
+│   └── {sample}/
+│       ├── {sample}.xls            Abundance filtered by -f threshold (→ Abundance.tsv)
+│       └── {sample}.GCF_detected.xls
+│
+└── 4.stat/                         Merged results (final output)
+    ├── Abundance.tsv               Relative abundance per species
+    ├── Coverage.tsv                Taxonomic coverage per species
+    ├── ...                         Other inferred profiles. Please see details in `Final output files`
+    └── Tags.tsv                    Digest statistics across all samples
+```
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -i INPUT              The filepath of the sample list. Each line includes an input sample ID and the file path of corresponding DNA sequence data where each field should be separated by <tab>. A line in this file that begins with # will be ignored. like 
-                          sample <tab> shotgun.1.fq(.gz) (<tab> shotgun.2.fq.gz)
-  -o OUTPUT             Output directory, default ./VIP2B_result
-  -l {Class,Order,Family,Genus,Species}
-                        taxo level, choose from Class/Order/Family/Genus/Species, default Species
-  -e ENZYME             Enzyme, One or more of the following enzymes: AlfI/AloI/BaeI/BcgI/BplI/BsaXI/BslFI/Bsp24I/CjeI/CjePI/CspCI/FalI/HaeIV/Hin4I/PpiI/PsrI. Multiple enzymes should be separated by commas. If you want to select all enzymes, you can simply provide "all". It should be noted that the selection of enzymes needs to correspond with the database. The default combination is AlfI,BcgI,BslFI,CjeI,CjePI,FalI,HaeIV,Hin4I.
-  -d DATABASE           Database for pipeline, default /data/USER/liujiang/tmp/sunzheng/20240905_viral/VIP2B.1.1/database/8Enzyme
-  -p PROCESSES          Number of processes, note that more threads may require more memory, default 1
-  -t THRESHOLD          Threshold for species identification, G5 means using gscore > 5 and M0.5 means using ML probability > 0.5 as a filtering parameter, G2/G5/M0.1/M0.5 are a few commonly used options, default M0.5
-  -c CUTOFF             cut off for database, default 30000
-  -f COV_THRESH         threshold for coverage filtering in the second round reads alignment, default 0.6
-  --intersection        intersection or union of tags between genomes, default union
+### Final output files
 
-author: Zheng Sun, Jiang Liu
-mail: sunzheng0618@gmail.com
-date: 2026/3/6 22:02:47
-version:  1.1
+| File | Description |
+|------|-------------|
+| `4.stat/Abundance.tsv` | Relative abundance table — species × samples, values sum to 1 per sample. Only species with coverage ≥ `-f` threshold. |
+| `4.stat/Coverage.tsv` | Taxonomic coverage table — species × samples, value = sequenced_tags / theoretical_tags. All detected species regardless of coverage. |
+| `4.stat/Phenotype.tsv` | Viral phenotype profiles — jumbo phage and lytic phage percentage per sample. |
+| `4.stat/viral_function/Uniref90.tsv` | Gene family abundance table (Uniref90 annotations). |
+| `4.stat/viral_function/cluster.tsv` | Gene cluster abundance table. |
+| `4.stat/host_taxonomy/<taxonomy>_abund.tsv` | Virus host abundance at a certain taxonomy level. |
+
+> **Note:** `4.stat/Phenotype.tsv`, `4.stat/viral_function/`, and `4.stat/host_taxonomy/` are produced by `anno_abund_processor.py` and require `metadata.tsv.gz` to be present in the database directory. 
+
+---
+
+## File structure
 
 ```
+VIP2B/
+├── Cargo.toml                  Rust workspace definition
+├── README.md
+├── requirement.txt             Python dependency list
+├── config/
+│   ├── def_db.list             Database file list and Zenodo URLs for auto-download
+│   ├── requirement.txt         Python dependencies (conda environment spec)
+│   └── XGB_none_0238.pkl       XGBoost model for -t M species ID filtering
+├── example/
+│   └── data.list               Example sample list
+├── scripts/                    Python helper scripts (called automatically by VIP2B)
+│   ├── CalculateRelativeAbundance_Single2bEnzyme.py   Phase 2 — qualitative abundance
+│   ├── CreatDB4AllLevel.py         Build per-sample quantitative database
+│   ├── quan_from_tags.py           marisa lookup from Rust-piped tag counts
+│   ├── gscore_filter.py            G-score species ID filter (-t G mode)
+│   ├── MAP2B_ML.py                 ML species ID filter (-t M mode)
+│   ├── MergeProfilesFromMultipleSamples.py   produce Abundance.tsv
+│   ├── MergeCoverageFromMultipleSamples.py   produce Coverage.tsv
+│   ├── dige_stat.py                produce Tags.tsv
+│   ├── anno_abund_processor.py     produce Phenotype.tsv, viral_function/, host_taxonomy/ (requires metadata.tsv.gz)
+│   ├── DownloadDB.py               Auto-download default database from Zenodo
+│   ├── convert_marisa.py           Utility: convert marisa → TSV (not used by pipeline)
+│   ├── assess.py
+│   ├── host_filter.py
+│   ├── host_marisa_trie.build.py
+│   ├── marisa_trie.build.py
+│   └── sequence_digestion.py       Original Python digest (superseded by Rust)
+└── vip2b/
+    ├── Cargo.toml              Rust package config (builds target/release/VIP2B)
+    └── src/
+        └── main.rs             Full pipeline source
+```
+
