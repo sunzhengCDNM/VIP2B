@@ -80,6 +80,7 @@ def main():
 						cov = '1'
 					else:
 						cov = info_dic[smp][spe]
+					cov_list.append(cov)
 				except KeyError:
 					cov_list.append('0')
 			OUT.write('{}\t{}\n'.format(spe, '\t'.join(cov_list)))

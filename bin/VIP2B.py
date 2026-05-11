@@ -273,12 +273,15 @@ def run_mkdb(enzyme_fa_dic, db_dir, level):
 def run_quan(data_dic, db_dir, level, cov_thresh):
 	done_file = O + '/3.quan/done'
 	abd_list = '{}/3.quan/abd.list'.format(O)
+	abd_list_cov = '{}/3.quan/abd_cov.list'.format(O)
 	quan_smp_set = set(data_dic.keys())
 	if os.path.exists(done_file):
 		report('INFO', 'The quantitative analysis has been completed, go to the next step')
 	else:
 		report('INFO', 'Start quantitative analysis')
 		check_dir(O + '/3.quan')
+
+		# Filtered pass (using cov_thresh) — used for Abundance.tsv
 		executor = ProcessPoolExecutor(args.processes)
 		pool = []
 		for smp in quan_smp_set:
@@ -286,13 +289,28 @@ def run_quan(data_dic, db_dir, level, cov_thresh):
 		executor.shutdown()
 		for res in pool:
 			res.result()
-		with open(abd_list, 'w') as OUT:
-			for smp in quan_smp_set: 
-				OUT.write('{}\t{}/3.quan/{}/{}.xls\n'.format(smp, O, smp, smp))
-		exe_shell('touch {}'.format(done_file), 'quan_done')
-	return(abd_list)
 
-def run_stat(abd_list, enzyme_smp_file, db_dir):
+		# Unfiltered pass (threshold=0) — used for Coverage.tsv
+		check_dir(O + '/3.quan_cov')
+		executor2 = ProcessPoolExecutor(args.processes)
+		pool2 = []
+		for smp in quan_smp_set:
+			pool2.append(executor2.submit(cc_abd, '{O}/2.mkdb/{smp}/{smp}'.format(O = O, smp = smp), '{}/abfh_classify_with_speciename.txt.gz'.format(db_dir), '{}/2.mkdb/{}/reads.list'.format(O, smp), O + '/3.quan_cov', 1, level, 0))
+		executor2.shutdown()
+		for res in pool2:
+			res.result()
+
+		with open(abd_list, 'w') as OUT:
+			for smp in quan_smp_set:
+				OUT.write('{}\t{}/3.quan/{}/{}.xls\n'.format(smp, O, smp, smp))
+		with open(abd_list_cov, 'w') as OUT:
+			for smp in quan_smp_set:
+				OUT.write('{}\t{}/3.quan_cov/{}/{}.xls\n'.format(smp, O, smp, smp))
+
+		exe_shell('touch {}'.format(done_file), 'quan_done')
+	return abd_list, abd_list_cov
+
+def run_stat(abd_list, abd_list_cov, enzyme_smp_file, db_dir):
 	done_file = O + '/4.stat/done'
 	if os.path.exists(done_file):
 		pass
@@ -300,7 +318,7 @@ def run_stat(abd_list, enzyme_smp_file, db_dir):
 		report('INFO', 'Start stat analysis')
 		check_dir(O + '/4.stat')
 		exe_shell('python3 {src_dir}/MergeProfilesFromMultipleSamples.py -l {abd_list} -o {O}/4.stat/Abundance.tsv'.format(src_dir = src_dir, abd_list = abd_list, O = O), 'MergeProfilesFromMultipleSamples')
-		exe_shell('python3 {src_dir}/MergeCoverageFromMultipleSamples.py -i {abd_list} -o {O}/4.stat/Coverage.tsv'.format(src_dir = src_dir, abd_list = abd_list, O = O), 'MergeCoverageFromMultipleSamples')
+		exe_shell('python3 {src_dir}/MergeCoverageFromMultipleSamples.py -i {abd_list_cov} -o {O}/4.stat/Coverage.tsv'.format(src_dir = src_dir, abd_list_cov = abd_list_cov, O = O), 'MergeCoverageFromMultipleSamples')
 		exe_shell('python3 {src_dir}/dige_stat.py -i {O}/0.dige -l {enzyme_smp_file} -e {enzyme} -o {O}/4.stat/Tags.tsv'.format(src_dir = src_dir, enzyme = enzyme, enzyme_smp_file = enzyme_smp_file, O = O), 'dige_stat')
 		exe_shell('python3 {src_dir}/anno_abund_processor.py -i {O}/4.stat/Abundance.tsv -d {db_dir}/metadata.tsv.gz -o {O}/4.stat'.format(src_dir = src_dir, enzyme = enzyme, db_dir = db_dir, enzyme_smp_file = enzyme_smp_file, O = O, config_dir = config_dir), 'dige_stat')
 		exe_shell('touch {}'.format(done_file), 'stat_done')
@@ -353,9 +371,9 @@ def main():
 	data_dic = get_datadic(enzyme_smp_file, none_micro_smp_file)
 	run_mkdb(data_dic, db_dir, args.level)
 	# quan
-	abd_list = run_quan(data_dic, db_dir, args.level, args.cov_thresh)
-	# stat 
-	run_stat(abd_list, enzyme_smp_file, db_dir)
+	abd_list, abd_list_cov = run_quan(data_dic, db_dir, args.level, args.cov_thresh)
+	# stat
+	run_stat(abd_list, abd_list_cov, enzyme_smp_file, db_dir)
 
 	report('INFO', 'Congratulations, all work has been completed')
 

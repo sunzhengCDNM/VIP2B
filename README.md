@@ -1,7 +1,7 @@
-# VIP2B (in construction)
-VIrome Profiler with type IIB restriction sites for WMS data
+# VIP2B
+VIrome Profiler with type IIB restriction sites for WMS data. This version is written purely in Python.
 
-![Figure1_workflow_of_VIP2B-3.pdf](https://github.com/user-attachments/files/25902608/Figure1_workflow_of_VIP2B-3.pdf)
+![Workflow_of_VIP2B](Workflow_of_VIP2B.jpg)
 
 
 ## Installation
@@ -17,13 +17,7 @@ All scripts in VIP2B are programmed by Perl and Python, and execution of VIP2B i
  
    `git clone https://github.com/sunzhengCDNM/VIP2B/`  
    `cd VIP2B`
-   
     This makes it easy to update the software in the future using `git pull` as bugs are fixed and features are added.
- * Alternatively, directly download the whole GitHub repo without installing GitHub:
- 
-   `wget https://github.com/sunzhengCDNM/VIP2B/archive/master.zip`  
-   `unzip master.zip`
-   `cd VIP2B-master`
 
  ### Install VIP2B in a conda environment 
  * Conda installation  
@@ -53,10 +47,10 @@ VIP2B is a highly automatic pipeline, and only a few parameters are required for
  
    `cd example`
    `mkdir -p data/`  
-   `wget -t 3 -O data/test_seq.R1.fq.gz https://zenodo.org/records/18947711/files/test_seq.R1.fq`  
-   `wget -t 3 -O data/test_seq.R2.fq.gz https://zenodo.org/records/18947711/files/test_seq.R2.fq`
+   `wget -t 3 -O data/test_seq.R1.fq.gz https://zenodo.org/records/19700476/files/test_seq.R1.fq.gz`  
+   `wget -t 3 -O data/test_seq.R2.fq.gz https://zenodo.org/records/19700476/files/test_seq.R2.fq.gz`
  
-* After downloading the sequencing data, we can finally run VIP2B:  
+* After downloading the sequencing data, we can run VIP2B:  
  
    `python3 ../bin/VIP2B.py -i data.list`
 
