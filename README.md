@@ -1,8 +1,7 @@
 # VIP2B
-VIrome Profiler with type IIB restriction sites for WMS data. This version is written purely in Python.
+VIrome Profiler with type IIB restriction sites for WMS data. This version is written purely in Python. To try an accelerated version using RUST and Python, please visit https://github.com/sunzhengCDNM/VIP2B/tree/perf/accelerated-version.
 
 ![Workflow_of_VIP2B](Workflow_of_VIP2B.jpg)
-
 
 ## Installation
  
