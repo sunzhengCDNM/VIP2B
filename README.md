@@ -105,9 +105,6 @@ Parameter explanation:
 | `--intersection` | Use tag intersection instead of union in mkdb step | off |
 | `--batch-size` | Reads per Rust parallel batch (tuning only) | `100000` |
 
-Available enzymes (16 total):  
-`AlfI AloI BaeI BcgI BplI BsaXI BslFI Bsp24I CjeI CjePI CspCI FalI HaeIV Hin4I PpiI PsrI`
-
 ### Species ID threshold (`-t`)
 
 | Value | Behaviour |
