@@ -10,7 +10,7 @@ VIP2B was computationally efficient. Using four CPU threads on a Linux system eq
 
 ## Installation
 ```bash
-git clone https://github.com/YiyanYang0728/VIP2B.git
+git clone -b perf/accelerated-version git@github.com:sunzhengCDNM/VIP2B.git
 cd VIP2B
 # Use the provided conda environment
 conda create -n VIP2B -c conda-forge --file requirement.txt
