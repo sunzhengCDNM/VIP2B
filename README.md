@@ -119,7 +119,7 @@ Available enzymes (16 total):
 
 ## Pipeline phases and output structure
 
-The pipeline produces **5 output folders**, matching the original VIP2B exactly:
+The pipeline produces **5 output folders**:
 
 ```
 {output}/
